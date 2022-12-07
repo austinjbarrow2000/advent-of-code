@@ -1,0 +1,19 @@
+$ cd /
+$ ls
+dir cdnhnmcb
+dir dmccnsqv
+290229 dsm
+dir gsszlj
+dir hmw
+dir jhmrn
+dir ncb
+dir npclt
+dir rvvjbz
+$ cd cdnhnmcb
+$ ls
+170937 fsjwz.css
+281758 jmfcfs.gsq
+109017 jwwv.zlz
+295735 tsrqvpbq
+$ cd ..
+$ cd dmccnsqv
