@@ -1,10 +1,14 @@
 import numpy as np
 
 # get input
+import os
+import sys
+
+
 def get_input(filename):
-    file = open(filename, "r")
-    input = file.read().splitlines()
-    return input
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
+    return results
 
 
 # is Head Adjacent to Tail Check (Also no movement if H is overlapping)
@@ -155,4 +159,4 @@ def main(filename):
     print("Unique Tail Positions (long version): " + str(len(set(rope[-1].pastCoords))))
 
 
-main("day-9/input.txt")
+main("input.txt")

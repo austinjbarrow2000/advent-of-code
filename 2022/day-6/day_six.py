@@ -1,10 +1,14 @@
+import os
+import sys
+
+
 def get_input(filename):
-    file = open(filename, "r")
-    result = file.read().splitlines()
-    return result
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
+    return results
 
 
-input = get_input("day-6/input.txt")
+input = get_input("input.txt")
 
 input = list(input[0])
 marker = []
@@ -17,7 +21,7 @@ while len(set(marker)) != 4:
     processed += 1
 print(processed)
 
-input = get_input("day-6/input.txt")
+input = get_input("input.txt")
 input = list(input[0])
 marker = []
 

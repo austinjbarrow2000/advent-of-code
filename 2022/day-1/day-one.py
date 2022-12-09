@@ -1,14 +1,15 @@
 from mergesort import *
+import os
+import sys
 
 
 def get_input(filename):
-    input_file = open(filename, "r")
-    results = input_file.read().splitlines()
-    input_file.close()
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
     return results
 
 
-filename = "day-one/input-calories.txt"
+filename = "./input-calories.txt"
 results = get_input(filename)
 
 totalCalories = []

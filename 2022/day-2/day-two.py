@@ -9,11 +9,13 @@ encryption = {
 
 # Had to change to
 
+import os
+import sys
+
 
 def get_input(filename):
-    input_file = open(filename, "r")
-    results = input_file.read().splitlines()
-    input_file.close()
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
     return results
 
 
@@ -43,7 +45,7 @@ def get_scoreTwo(round, encryption):
     )  # Win must occur. For you to win, you must have the one +1
 
 
-results = get_input("day-two/input.txt")
+results = get_input("input.txt")
 score = 0
 scoreTwo = 0
 for round in results:

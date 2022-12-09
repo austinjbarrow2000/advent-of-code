@@ -1,10 +1,14 @@
 import numpy as np
 
 ## Functions
+import os
+import sys
+
+
 def get_input(filename):
-    file = open(filename, "r")
-    input = file.read().splitlines()
-    return input
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
+    return results
 
 
 def check_visible(x, y, grid, value):
@@ -69,7 +73,7 @@ def check_visibility(x, y, grid, value):
 
 ## Main Code
 
-input = get_input("day-8/input.txt")
+input = get_input("input.txt")
 
 grid = np.zeros((len(input), len(input)))
 for x, line in enumerate(input):

@@ -1,7 +1,10 @@
+import os
+import sys
+
+
 def get_input(filename):
-    input_file = open(filename, "r")
-    results = input_file.read().splitlines()
-    input_file.close()
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
     return results
 
 
@@ -20,7 +23,7 @@ def findCommon(rucksackGroup):
     return common - 38
 
 
-rucksacks = get_input("day-3/input.txt")
+rucksacks = get_input("input.txt")
 result = 0
 groupRucksack = []
 resultTwo = 0

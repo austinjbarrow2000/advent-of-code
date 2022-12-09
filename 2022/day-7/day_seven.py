@@ -15,9 +15,13 @@ class File(object):
         self.size = int(size)
 
 
+import os
+import sys
+
+
 def get_input(filename):
-    file = open(filename, "r")
-    results = file.read().splitlines()
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
     return results
 
 
@@ -45,7 +49,7 @@ def mergesort(arr):
     return arr
 
 
-input = get_input("day-7/input.txt")
+input = get_input("input.txt")
 directories = []
 home = Directory("/", None)
 directories.append(home)

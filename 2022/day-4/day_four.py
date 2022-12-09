@@ -1,10 +1,14 @@
+import os
+import sys
+
+
 def get_input(filename):
-    input = open(filename, "r")
-    result = input.read().splitlines()
-    return result
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
+    return results
 
 
-pairs = get_input("day-4/input.txt")
+pairs = get_input("input.txt")
 
 reconsider = 0
 overlap = 0

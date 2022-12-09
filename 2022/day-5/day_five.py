@@ -1,7 +1,11 @@
+import os
+import sys
+
+
 def get_input(filename):
-    file = open(filename, "r")
-    result = file.read().splitlines()
-    return result
+    with open(os.path.join(sys.path[0], filename), "r") as f:
+        results = f.read().splitlines()
+    return results
 
 
 def convert_input(input):
@@ -49,7 +53,7 @@ def execute_instructions2(stacks, instruction_input):
     return stacks
 
 
-input = get_input("day-5/input.txt")
+input = get_input("input.txt")
 
 crate_input, instruction_input = convert_input(input)
 stacks = create_stacks(crate_input)
