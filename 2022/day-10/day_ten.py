@@ -13,8 +13,7 @@ def get_input(filename):
 def check_cycle():
     crtRow.append("#") if len(crtRow) in sprite else crtRow.append(".")
 
-    possible_nums = [20, 60, 100, 140, 180, 220]
-    if cycles in possible_nums:
+    if cycles in [20, 60, 100, 140, 180, 220]:
         signal_strengths.append(register * cycles)
 
 
