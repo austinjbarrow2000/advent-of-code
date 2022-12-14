@@ -112,6 +112,7 @@ def part2(filename):
 
 
 part2("part2input.txt")
+
 # 5588 is correct!
 # 5735 too high
 
