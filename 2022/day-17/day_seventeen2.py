@@ -117,56 +117,70 @@ def main(filename):
     top = 0
     moveIndex = 0
     i = 0
-    num = 100000
+    num = 1000
     extra = 0
     countRocks = []
     while i < numRocks:
-        # wait(0.2)
+        # wait(0.01)
         # for i in range(numRocks):
         print(i)
         print((i / numRocks) * 100, '%')
         # print(numRocks, i)
         #print(numRocks - i, 'yo')
+        # print(top)
+        # if top == 13066 + 2:
+        #     countRocks.append(i)
+        # if top == (13066 + 2548 + 2):
+        #     countRocks.append(i)
 
-        if top == 47:
-            countRocks.append(i)
-        if top == 100:
-            countRocks.append(i)
+        # print('rocks', countRocks)
+        # 680
 
-        # if i >= 152 and (numRocks - i > (35 * num)):
-        #     print('rocks', countRocks)
-        #     print('i', i)
-        #     extra += 53 * num  # 81 * num  # how many rows is it not how many rocks
-        #     i += 35 * num  # how many rocks are added
-        #     continue
+        if i >= (20000) and (numRocks - i > (1690 * num)):
+            print('rocks', countRocks)
+            print('i', i)
+            extra += 2548 * num  # 81 * num  # how many rows is it not how many rocks
+            i += 1690 * num  # how many rocks are added
+            continue
 
         # For test, rows increased by 53 for every 35 rocks
         # 1514285714288
 
         # For input, rows increased by for every rocks
 
-        # Can see it repeats
-        if i == 1000:
-            # np.zeros((2000, 8), int)
-            array = np.empty(shape=(1525, 8), dtype=str)
-            for key in chamber.keys():
-                print(key[0], key[1])
-                array[key[1]][key[0]] = '■'
-            # print(empty_array)
-            array = np.flip(array)
-            copy = array[100]
-            for idx, row in enumerate(array):
-                print(1524 - idx, end=" ")
-                for value in row:
-                    if (value == ''):
-                        print(' ', end="")
-                    print(value, end="")
-                #print([*row], [*copy], end="")
-                if [*row] == [*copy]:
-                    print('beep', end="")
-                print(" ")
+        # 2360, 442
 
-            wait(10)
+        # Repeats (680, 147)
+
+        # Can see it repeats
+        # if i == 13000:
+        #     # np.zeros((2000, 8), int)
+        #     array = np.empty(shape=(3000, 8), dtype=str)
+        #     keys = [key for key in chamber.keys() if key[1] >
+        #             10000 and key[1] < 13000]
+        #     for key in keys:
+        #         print(key[0], key[1])
+        #         array[key[1] - 10000][key[0]] = '■'
+        #     # print(empty_array)
+        #     array = np.flip(array)
+        #     copy = array[1000]
+        #     for idx, row in enumerate(array):
+        #         print(3009 - idx, end=" ")
+        #         for value in row:
+        #             if (value == ''):
+        #                 print(' ', end="")
+        #             print(value, end="")
+        #         #print([*row], [*copy], end="")
+        #         if [*row] == [*copy]:
+        #             print('beep', end="")
+        #         print(" ")
+
+        #     wait(10)
+
+        # 1702
+        # 1269,
+        # 551, 373
+        # 793
 
         # 46, 99, 152, 205, 258 repeats
 
@@ -225,4 +239,4 @@ def main(filename):
     print(top + extra)
 
 
-main("test.txt")
+main("input.txt")
