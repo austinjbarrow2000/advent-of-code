@@ -5,7 +5,7 @@ import sys
 from time import sleep as wait
 
 
-# get input
+# get input (Put ints into flows and all uppercase two letters into valves then split into valve + children)
 def get_input(filename):
     with open(os.path.join(sys.path[0], filename), 'r') as f:
         input = f.read().splitlines()
@@ -23,11 +23,7 @@ class Valve(object):
         self.name = name
         self.flowRate = int(flowRate[0])
         self.children = children
-        self.open = False
         self.dist = []
-
-    def open(self):
-        self.open = True
 
     def addDist(self, valveKey, flowRate, dist):
         self.dist.append((valveKey, flowRate, dist))
@@ -42,11 +38,6 @@ def parse_input(flows, valve, children):
     return graph
 
 
-# dijkstra algorithm to find max pressure path
-# def dijkstra(graph, start):
-#     time = 30
-
-
 # find distances of all nonzero valves to other nonzero valves using BFS
 def bfs(graph, valveStart):
     visited = []
@@ -57,7 +48,6 @@ def bfs(graph, valveStart):
         if valve in visited:
             continue
 
-        # and valve != valveStart:
         if graph[valve].flowRate > 0 and valve not in visited:
             graph[valveStart].dist.append(
                 (valve, graph[valve].flowRate, dist + 1))  # added plus one to distance here to account for opening
@@ -67,113 +57,112 @@ def bfs(graph, valveStart):
             queue.append((child, dist + 1))
 
 
-# Using the distances find max pressure path in 30 min
-# def find_max(paths, time):
-#     for path in paths:
-#         if (time - path[3] < 30):
-#             return
-#         else:
-#             time -= path[3]
-#             find_max(graph(path[0]).dist, time)
-
-
-def find_paths(graph, valveStart):
+# Another bfs to get all paths and pressures, keeping track of maxpressure when child of curr is in path
+# This does all the math of deleting from totalTime the distance plus opening of valve
+def find_paths(graph, valveStart, totalTime):
     paths = [0]  # all of the paths
     pressures = [0]  # all of the pressures of the paths
-    q = deque([(valveStart, [], 0, 0, 30)])
+    q = deque([(valveStart, [], 0, 0, totalTime)])
     maxPressure = 0
 
     while q:
         curr, path, pressure, pressureRelease, time = q.popleft()
-        #print("Current: ", curr)
-        # if curr in path:
-        #     continue
 
         for child in graph[curr].dist:
-            # wait(.5)
             if child[0] in path:
-                print(len(q))
-
                 if (pressure + (pressureRelease * (time-1))) > maxPressure and (pressure + (pressureRelease * (time-1))) < 1929:
-                    # paths.pop(0)
-                    # pressures.pop(0)
+                    paths.pop(0)
+                    pressures.pop(0)
                     paths.append((curr, path, pressure, pressureRelease, time))
                     pressures.append(pressure + (pressureRelease * (time-1)))
-                    # Issue with this time - 1
                     maxPressure = pressure + (pressureRelease * (time-1))
-                print("MAX PRESSURE: ", maxPressure)
-                print("PATH: ", paths)
-
                 continue
 
-            #print("CHILD", child)
             childPath = [*path]
             childPressure = pressure
             childPressureRelease = pressureRelease
-
-            # if len(path) == (len(graph[valveStart].dist) + 1):
-            #     paths.append((curr, path, pressure, pressureRelease, time))
-            #     pressures.append(pressure + (pressureRelease * (time-1)))
-            #     continue
 
             childPath.append(child[0])
             # dont multiple child pressure, multiple
             childPressure += child[1] + (childPressureRelease * (child[2]))
             childPressureRelease += child[1]
 
-            # if len(path) == (len(graph[valveStart].dist) + 1):
-            #     paths.append((curr, path, pressure, pressureRelease, time))
-            #     pressures.append(pressure + (pressureRelease * (time-1)))
-            #     print('hi')
-            #     continue
+            if time - child[2] < 0:
+                continue
 
             q.append((child[0], childPath, childPressure,
                       childPressureRelease, time - (child[2])))
-            # print(q)
 
     return paths, pressures
 
 
 # main function
 def main(filename):
+
+    # -------------------------------------------------------------------------------------------------
+    # PART 1
     flows, valve, children = get_input(filename)
     graph = parse_input(flows, valve, children)
 
+    startIndex = 0
+    for i, valveStart in enumerate(valve):
+        if valveStart == 'AA':
+            startIndex = i
+
     # run bfs and get distances to all nonzero flowrate
     for valveStart in valve:
-        print(valveStart)
-        if graph[valveStart].flowRate > 0 or valveStart == valve[0]:
+        if graph[valveStart].flowRate > 0 or valveStart == valve[startIndex]:
             bfs(graph, valveStart)
-            print(graph[valveStart].dist)
 
     # get all the paths starting from A that can be done in less than 30
-    # print(graph.keys())
-    paths, pressures = find_paths(graph, valve[0])
+    paths, pressures = find_paths(graph, valve[startIndex], 30)
 
-    print(paths)
-    print(pressures)
-    maxIndex = pressures.index(max(pressures))
-    print(paths[maxIndex])
-    print(pressures[maxIndex])
-    #print(1651 in pressures)
-    # path = deque([valve[0]])
-    # while path:
-    #     valve = path.popleft()
+    print(paths[0])
+    print(pressures[0])
 
-    # paths = []
-    # for valve in graph[valve[0]].dist:
-    #     time = 30
-    #     time -= valve[3]
-    #     path = []
-    #     while time > 0:
-    #         return 0
+    # -------------------------------------------------------------------------------------------------
+    # PART 2
+    # run part 1 with 26 minutes, and then turn that top path's valves to 0 and run again with new valves
+    print("PART 2")
+
+    # Part 1 with 26 minutes
+    flows, valve, children = get_input(filename)
+    graph = parse_input(flows, valve, children)
+
+    startIndex = 0
+    for i, valveStart in enumerate(valve):
+        if valveStart == 'AA':
+            startIndex = i
+
+    for valveStart in valve:
+        if graph[valveStart].flowRate > 0 or valveStart == valve[startIndex]:
+            bfs(graph, valveStart)
+
+    paths1, pressures1 = find_paths(graph, valve[startIndex], 26)
+
+    # Part 1 with 26 minutes and the optimal human valves opened set to zero to find optimal elephant
+    print(paths1[0])
+    print(pressures1[0])
+
+    for valve in paths1[0][1]:
+        graph[valve].flowRate = 0
+
+    flows, valve, children = get_input(filename)
+    graph = parse_input(flows, valve, children)
+
+    for valve1 in paths1[0][1]:
+        graph[valve1].flowRate = 0
+
+    for valveStart in valve:
+        if graph[valveStart].flowRate > 0 or valveStart == valve[startIndex]:
+            bfs(graph, valveStart)
+
+    paths2, pressures2 = find_paths(graph, valve[startIndex], 26)
+    print(paths2[0])
+    print(pressures2[0])
+
+    # add optimal human and optimal leftover elphant to get maxpressure
+    print(pressures1[0] + pressures2[0])
 
 
-# 1849 too low
-# 1908 too low
-# 2016 too high
-
-
-#1908, 2016, 1992, 1941
-# 1992 not the right answer, neither 1941, 1935, 1930, 1929, 1927
 main("input.txt")
