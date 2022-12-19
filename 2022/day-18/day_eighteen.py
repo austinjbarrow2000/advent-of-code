@@ -76,18 +76,12 @@ class Droplet(object):
         maxX = maxY = maxZ = 0
         minX = minY = minZ = 10000
         for key in self.cube_coords.keys():
-            if key[0] > maxX:
-                maxX = key[0]
-            if key[1] > maxY:
-                maxY = key[1]
-            if key[2] > maxZ:
-                maxZ = key[2]
-            if key[0] < minX:
-                minX = key[0]
-            if key[1] < minY:
-                minY = key[1]
-            if key[2] < minZ:
-                minZ = key[2]
+            maxX = max(key[0], maxX)
+            maxY = max(key[1], maxY)
+            maxZ = max(key[2], maxZ)
+            minX = min(key[0], minX)
+            minY = min(key[1], minY)
+            minZ = min(key[2], minZ)
         bounds = [minX, minY, minZ, maxX, maxY, maxZ]
         return bounds
 
