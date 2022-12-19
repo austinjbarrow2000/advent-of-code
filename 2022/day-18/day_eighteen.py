@@ -5,6 +5,14 @@ from collections import deque
 
 # get input function
 def get_input(filename):
+    """Open the given file and return the list of lines split into x,y,z coordinates for the droplet
+
+    Args:
+        filename (str): file name of the input 
+
+    Returns:
+        list(str): list of strings containing the coordinates of the droplet
+    """
     with open(os.path.join(sys.path[0], filename), 'r') as f:
         input = f.read().splitlines()
         input = [line.split(',') for line in input]
@@ -14,18 +22,34 @@ def get_input(filename):
 # droplet class
 class Droplet(object):
     def __init__(self, coord_lines):
+        """Initialize droplet by storing input of strings, parseing the input into dictionary of coords,
+        using the coords to calculate the droplet bounds, and then calculating the surface area
+
+        Args:
+            coord_lines list(str): list of strings that contain the coordinates of the droplet
+        """
         self.coord_lines = coord_lines
         self.cube_coords = self.parse_coord_lines()
         self.circle_bounds = self.get_circle_bounds()
         self.surface_area = self.get_surface_area()
 
-    def parse_coord_lines(self):
+    def parse_coord_lines(self) -> dict[int, int, int]:
+        """Parse given input into dictionary indicating coordinates of the droplet
+
+        Returns:
+            dict[int,int,int]: dictionary of all coordinates of the droplet
+        """
         cube_coords = {}
         for coord in self.coord_lines:
             cube_coords[(int(coord[0]), int(coord[1]), int(coord[2]))] = 'D'
         return cube_coords
 
-    def get_surface_area(self):
+    def get_surface_area(self) -> int:
+        """Calculate surface area of the droplet exposed to the elements 
+
+        Returns:
+            int: number of surfaces exposed to the elements
+        """
         neighbors = [(0, 0, 1), (0, 1, 0), (1, 0, 0),
                      (0, 0, -1), (0, -1, 0), (-1, 0, 0)]
 
@@ -41,10 +65,14 @@ class Droplet(object):
                     # check if the neighbor has access to the outside of the sphere
                     if self.bfs(neighbor_coord):
                         surface_area += 1
-        return surface_area  # surface_area
+        return surface_area
 
-    # get the bounds of the cube around the circle (max X, maxY, maxZ, minX, minY, minZ)
-    def get_circle_bounds(self):
+    def get_circle_bounds(self) -> list[int]:
+        """Calculate the bounds of the cube encapsulating the droplet given the droplet coordinates
+
+        Returns:
+            list[int]: bounds of the cube encapsulating the droplet (max X, max Y, max Z, minX, minY, minZ)
+        """
         maxX = maxY = maxZ = 0
         minX = minY = minZ = 10000
         for key in self.cube_coords.keys():
@@ -63,10 +91,19 @@ class Droplet(object):
         bounds = [minX, minY, minZ, maxX, maxY, maxZ]
         return bounds
 
-    # BFS function
-    # get neighbors of coord, add them to the queue and visited, check if coord outside of bounds of circle
+    def bfs(self, coord: list[int]) -> bool:
+        """BFS function to check if droplet cube neighbor has access outside of droplet. Using the neighbors 
+        coordinates, adds all of their neighbors to the queue and visited, adds all of those neighbors
+        recursively (if not visited), until one of their coordinates outside of circle bounds or neighbors
+        run out.
 
-    def bfs(self, coord):
+        Args:
+            coord (list[int]): coordinates of droplet cube neighbor  
+
+        Returns:
+            bool: True/false if given coordinate has access outside of droplet
+        """
+
         neighbors = [(0, 0, 1), (0, 1, 0), (1, 0, 0),
                      (0, 0, -1), (0, -1, 0), (-1, 0, 0)]
         visited = []
@@ -88,8 +125,12 @@ class Droplet(object):
         return False
 
 
-# main function
-def main(filename):
+def main(filename: str):
+    """ Get filename, make droplet from file and print surface area
+
+    Args:
+        filename (str): File name of the input file
+    """
     input = get_input(filename)
     droplet = Droplet(input)
     print(droplet.surface_area)
