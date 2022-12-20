@@ -82,8 +82,8 @@ class BluePrint(object):
                 queue = placeholder_queue
 
             # check if each robot can be created and add to queue what it would be like if it was created
-            # Check the minimum number of specific resource to produce any robot for each robot to create different
-            # branches
+            # Check the minimum number of specific resource to produce any robot for each robot to create
+            # different branches
             if (time_elapsed <= total_time):
 
                 # print path if new max geode found
@@ -104,7 +104,8 @@ class BluePrint(object):
 
                 # ore_robot
                 # check if there are resources for ore robot and robots less than max you can spend ore per turn
-                if num_resources[0] >= self.ore_robot and num_robots[0] < max(self.ore_robot, self.clay_robot, self.obsidian_robot[0], self.geode_robot[0]):
+                if num_resources[0] >= self.ore_robot and \
+                        num_robots[0] < max(self.ore_robot, self.clay_robot, self.obsidian_robot[0], self.geode_robot[0]):
                     temp_robots = np.copy(num_robots)
                     temp_resources = np.copy(num_resources)
                     temp_resources = np.add(temp_robots, temp_resources)
@@ -113,7 +114,8 @@ class BluePrint(object):
                     queue.append([temp_robots, temp_resources, time_elapsed])
 
                 # clay robot
-                # Check if there are resources for clay robot and robots less than max you can spend clay per turn
+                # Check if there are resources for clay robot and robots less than max you can
+                # spend clay per turn
 
                 if num_resources[0] >= self.clay_robot and num_robots[1] < self.obsidian_robot[1]:
                     temp_robots = np.copy(num_robots)
@@ -124,9 +126,12 @@ class BluePrint(object):
                     queue.append([temp_robots, temp_resources, time_elapsed])
 
                 # obsidian_robot
-                # Check if there are clay robots, if there are resources for obsidian robot and and robots less than max you can spend obsidian per turn
+                # Check if clay robots, if resources for obsidian robot,
+                # and if robots less than max you can spend obsidian per turn
 
-                if num_robots[1] > 0 and num_resources[0] >= self.obsidian_robot[0] and num_resources[1] >= self.obsidian_robot[1] and num_robots[3] < 5 and num_robots[2] < self.geode_robot[1]:
+                if num_robots[1] > 0 and num_resources[0] >= self.obsidian_robot[0] and \
+                        num_resources[1] >= self.obsidian_robot[1] and num_robots[3] < 5 and \
+                        num_robots[2] < self.geode_robot[1]:
                     temp_robots = np.copy(num_robots)
                     temp_resources = np.copy(num_resources)
                     temp_resources = np.add(temp_robots, temp_resources)
@@ -138,7 +143,8 @@ class BluePrint(object):
                 # geode_robot
                 # Check if there are obsidian robots, if there are resources for geode robot
 
-                if num_robots[2] > 0 and num_resources[0] >= self.geode_robot[0] and num_resources[2] >= self.geode_robot[1]:
+                if num_robots[2] > 0 and num_resources[0] >= self.geode_robot[0] and \
+                   num_resources[2] >= self.geode_robot[1]:
                     temp_robots = np.copy(num_robots)
                     temp_resources = np.copy(num_resources)
                     temp_resources = np.add(temp_robots, temp_resources)
@@ -147,11 +153,13 @@ class BluePrint(object):
                     temp_resources[2] -= self.geode_robot[1]
                     queue.append([temp_robots, temp_resources, time_elapsed])
 
-                # Only wait for new materials (do not produce a robot) if we are missing a resource and we have a
-                # robot that produces it
+                # Only wait for new materials (do not produce a robot) if we are missing
+                # a resource and we have a robot that produces it
 
-                # did not produce ore, clay, or obsidian robot due to not having enough ore for them (+ we have ore robot)
-                if (num_resources[0] < max(self.ore_robot, self.clay_robot, self.obsidian_robot[0], self.geode_robot[0]) and num_robots[0] > 0):
+                # did not produce ore, clay, or obsidian robot due to not having enough ore
+                # (+ we have ore robot)
+                if (num_resources[0] < max(self.ore_robot, self.clay_robot, self.obsidian_robot[0],
+                                           self.geode_robot[0]) and num_robots[0] > 0):
                     num_resources = np.add(num_robots, num_resources)
                     queue.append([num_robots, num_resources, time_elapsed])
                     continue
@@ -162,7 +170,8 @@ class BluePrint(object):
                     queue.append([num_robots, num_resources, time_elapsed])
                     continue
 
-                # did not produce obsidian robot due to not having enough obsidian for them (+ we have obsidian robot)
+                # did not produce obsidian robot due to not having enough obsidian
+                # for them (+ we have obsidian robot)
                 if (num_resources[2] < self.geode_robot[1] and num_robots[2] > 0):
                     num_resources = np.add(num_robots, num_resources)
                     queue.append([num_robots, num_resources, time_elapsed])
