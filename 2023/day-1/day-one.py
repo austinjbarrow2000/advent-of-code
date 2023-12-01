@@ -11,19 +11,50 @@ def get_input(filename):
 filename = "./input.txt"
 results = get_input(filename)
 
-# totalCalories = []
-# sum = 0
-# for num in results:
-#     if num == "":
-#         totalCalories.append(sum)
-#         sum = 0
-#     else:
-#         sum += int(num)
 
-# sortedCalories = mergesort(totalCalories)
-# print(sortedCalories)
+numbers = {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+}
 
-# topThree = 0
-# for i in range(0, 3):
-#     topThree += sortedCalories[i]
-# print(topThree)
+
+def extract_numbers_and_words(s):
+    result = ""
+    current_word = ""
+    for char in s:
+        # print("char:" + char)
+        # print("current:" + current_word)
+        # print("result:" + result)
+        if char.isalpha():
+            current_word += char
+        elif char.isdigit():
+            result += char
+            current_word = ""
+        else:
+            current_word = ""
+
+        for key in numbers.keys():
+            if key in current_word:
+                result += numbers.get(key)
+                current_word = current_word[-1:]
+
+    return result
+
+
+sum = 0
+for str1 in results:
+    result = extract_numbers_and_words(str1)
+    print("result: " + result)
+    result_int = result[0] + result[-1]
+    print(result_int)
+
+    sum += int(result_int)
+
+print(sum)
